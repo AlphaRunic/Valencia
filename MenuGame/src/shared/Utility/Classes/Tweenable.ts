@@ -1,11 +1,11 @@
-import { Tween } from "../../Utility/Functions/UI/Tween";
+import { Tween } from "../Functions/UI/Tween";
 
-export class Tweenable<T extends Instance = Instance> {
+export class Tweener<T extends Instance = Instance> {
     public constructor(
         public readonly Instance: T
     ) {}
 
-    public Tween(tweenInfo: TweenInfo, goal: object): Tween {
-        return Tween(this.Instance, tweenInfo, goal);
+    public Tween(tweenInfo: TweenInfo, goal: Partial<ExtractMembers<T, Tweenable>>): Tween {
+        return Tween<T>(this.Instance, tweenInfo, goal);
     }
 }

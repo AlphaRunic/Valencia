@@ -1,5 +1,5 @@
+import { AnimatedButtonDefaults } from "shared/Utility/Classes/AnimatedButton";
 import { Pair } from "shared/Utility/Classes/Pair";
-import { AnimatedButtonDefault } from "./AnimatedButtonDefault";
 import { GetScaledUDim } from "./GetScaledUDim";
 import { Tween } from "./Tween";
 
@@ -13,7 +13,7 @@ export function ClickPop(button: GuiButton, pop: number, spd: number) {
     button.MouseButton1Up.Connect(() => ClickPopUp(button, pop, spd, defaultGoal));
 }
 
-export function ClickPopUp(button: GuiButton, pop: number, spd: number, defaultGoal: AnimatedButtonDefault): Tween {
+export function ClickPopUp(button: GuiButton, pop: number, spd: number, defaultGoal: AnimatedButtonDefaults): Tween {
     const info = new TweenInfo(spd / 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut);
 
     function GetPop(): Pair<UDim2> {
@@ -33,7 +33,7 @@ export function ClickPopUp(button: GuiButton, pop: number, spd: number, defaultG
     });
 }
 
-export function ClickPopDown(button: GuiButton, pop: number, spd: number, defaultGoal: AnimatedButtonDefault): Tween {
+export function ClickPopDown(button: GuiButton, pop: number, spd: number, defaultGoal: AnimatedButtonDefaults): Tween {
     const info = new TweenInfo(spd / 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut);
 
     function GetPop(): Pair<UDim2> {

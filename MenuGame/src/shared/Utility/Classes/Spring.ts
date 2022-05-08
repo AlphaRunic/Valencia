@@ -1,4 +1,4 @@
-import IsNaN from "../../Utility/Functions/IsNaN";
+import IsNaN from "../Functions/IsNaN";
 
 export default class Spring {
     static readonly Iterations = 8;

@@ -1,10 +1,7 @@
-import Knit, { Player } from "@rbxts/knit/Knit/KnitClient";
-import { TeleportService as TP } from "@rbxts/services";
-import { Exception } from "shared/Internal/Exception";
+import Knit from "@rbxts/knit/Knit/KnitClient";
 import { UI } from "shared/Utility/Classes/UI";
 import { Element } from "../Element";
-import AnimatedButton from "shared/Utility/Functions/UI/AnimatedButton";
-import WaitFor from "shared/Utility/Functions/WaitFor";
+import AnimatedButton from "shared/Utility/Classes/AnimatedButton";
 import Roact from "@rbxts/roact";
 
 const spd = {
@@ -47,7 +44,7 @@ export class MenuButton extends Roact.Component<Props, State> {
         const b = this.ref.getValue()!;
         const btn = new AnimatedButton(b);
         btn.ClickPop(this.state.Pop, spd.menuButtons)
-            .HoverColor(Color3.fromRGB(255, 255, 255), this.state.ImgColor, spd.menuButtons)
+            .HoverColor(Color3.fromRGB(255, 255, 255), this.state.ImgColor, spd.menuButtons)!
             .HoverPop(this.state.Pop, spd.menuButtons);
     }
 

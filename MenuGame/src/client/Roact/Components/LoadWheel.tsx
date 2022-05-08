@@ -1,6 +1,6 @@
+import { Tweener } from "shared/Utility/Classes/Tweenable";
 import { Element } from "../Element";
 import Roact from "@rbxts/roact";
-import { Tweenable } from "shared/Utility/Classes/Tweenable";
 
 interface Props {
     Pos: UDim2;
@@ -13,13 +13,11 @@ export class LoadWheel extends Roact.Component<Props> {
 
     protected didMount(): void {
         const img: ImageLabel = this.ref.getValue()!;
-        const wheel = new Tweenable(img);
-        const t = wheel.Tween(
+        const wheel = new Tweener(img);
+        wheel.Tween(
             new TweenInfo(.85, Enum.EasingStyle.Linear, Enum.EasingDirection.In, math.huge),
             { Rotation: img.Rotation + 360 }
         );
-
-        game.BindToClose(() => t.Cancel());
     }
 
     public render(): Element<ImageLabel> {

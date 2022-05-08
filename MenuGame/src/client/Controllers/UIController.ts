@@ -1,6 +1,6 @@
 import { KnitClient as Knit } from "@rbxts/knit";
 import { Player } from "@rbxts/knit/Knit/KnitClient";
-import { Workspace as World, TeleportService as TP, RunService } from "@rbxts/services";
+import { TeleportService as TP } from "@rbxts/services";
 import { Exception } from "shared/Internal/Exception";
 import { UI } from "shared/Utility/Classes/UI";
 import { Menu } from "client/Roact/MenuMain";
@@ -21,15 +21,9 @@ let currentFrame: Frame;
 const UIController = Knit.CreateController({
     Name: "UIController",
 
-    Initiate(): void {
-        let cam = World.CurrentCamera;
-        while (cam === undefined)
-            cam = World.CurrentCamera;
-        
-        cam.CameraType = Enum.CameraType.Scriptable;
-        RunService.BindToRenderStep("MenuCamera", Enum.RenderPriority.Camera.Value, () => cam!.CFrame = WaitFor<Part>(World, "Cam").CFrame);
+    Initiate(mainName: keyof PlayerGui["Menu"]): void {
         this.Mount();
-        this.FocusMain("Main");
+        this.FocusMain(mainName);
     },
 
     Mount(): void {

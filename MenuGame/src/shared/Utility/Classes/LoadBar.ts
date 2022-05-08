@@ -1,8 +1,8 @@
-import { Tweenable } from "../../Classes/Tweenable";
-import { UI } from "../../Classes/UI";
+import { Tweener } from "./Tweenable";
+import { UI } from "./UI";
 import ObjectEvent from "@rbxts/object-event";
 
-export class LoadBar extends Tweenable {
+export class LoadBar extends Tweener<Frame> {
     private progressSpeed: number;
     private top: Frame;
     private info: TweenInfo;
