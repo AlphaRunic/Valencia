@@ -2,11 +2,11 @@ import { Tween } from "./Tween";
 import { ClickPop } from "./ClickPop";
 import { HoverPop } from "./HoverPop";
 import { GetScaledUDim } from "./GetScaledUDim";
-import { Tweenable } from "shared/Utility/Classes/Tweenable";
+import { Tweener } from "shared/Utility/Classes/Tweenable";
 import { LoadBar } from "./LoadBar";
 
 export { 
-    Tweenable, 
+    Tweener as Tweenable, 
     LoadBar, 
     Tween, 
     ClickPop, 

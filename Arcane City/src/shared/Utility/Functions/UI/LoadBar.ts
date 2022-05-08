@@ -1,8 +1,8 @@
-import { Tweenable } from "../../Classes/Tweenable";
+import { Tweener } from "../../Classes/Tweenable";
 import { UI } from "../../Classes/UI";
 import ObjectEvent from "@rbxts/object-event";
 
-export class LoadBar extends Tweenable {
+export class LoadBar extends Tweener<Frame> {
     private progressSpeed: number;
     private top: Frame;
     private info: TweenInfo;
@@ -14,6 +14,7 @@ export class LoadBar extends Tweenable {
     public constructor(bar: Frame, progressSpeed = .2) {
         const top = UI.FindElement<Frame>(bar, "Top");
         super(top);
+        
         this.progressSpeed = progressSpeed;
         this.top = top;
         this.info = new TweenInfo(this.progressSpeed);

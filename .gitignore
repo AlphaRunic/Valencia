@@ -1,6 +1,5 @@
-/node_modules
-/out
-/include
-/.vscode
+**/node_modules
+**/out
+**/include
 /.eslintrc.json
 *.tsbuildinfo

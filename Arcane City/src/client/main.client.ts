@@ -6,5 +6,3 @@ for (const v of WaitFor<Folder>(script.Parent!, "Controllers").GetDescendants())
         require(v);
 
 Knit.Start().catch(warn);
-
-const ui = Knit.GetController("UIController");
