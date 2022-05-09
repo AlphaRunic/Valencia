@@ -1,4 +1,4 @@
-import { AnimatedButtonDefault } from "./AnimatedButtonDefault";
+import { AnimatedButtonDefaults } from "shared/Utility/Classes/AnimatedButton";
 import { GetScaledUDim } from "./GetScaledUDim";
 import { Tween } from "./Tween";
 
@@ -12,7 +12,7 @@ export function HoverPop(button: GuiButton, pop: number, spd: number) {
     button.MouseLeave.Connect(() => HoverPopDown(button, spd, defaultGoal));
 }
 
-export function HoverPopUp(button: GuiButton, pop: number, spd: number, defaultGoal: AnimatedButtonDefault): Tween {
+export function HoverPopUp(button: GuiButton, pop: number, spd: number, defaultGoal: AnimatedButtonDefaults): Tween {
     const info = new TweenInfo(spd, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut);
     const popUDim = new UDim2(0, pop, 0, pop);
     const scaled: UDim2 = GetScaledUDim(button, popUDim);
@@ -27,7 +27,7 @@ export function HoverPopUp(button: GuiButton, pop: number, spd: number, defaultG
     });
 }
 
-export function HoverPopDown(button: GuiButton, spd: number, defaultGoal: AnimatedButtonDefault): Tween {
+export function HoverPopDown(button: GuiButton, spd: number, defaultGoal: AnimatedButtonDefaults): Tween {
     const info = new TweenInfo(spd, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut);
     return Tween(button, info, defaultGoal);
 }

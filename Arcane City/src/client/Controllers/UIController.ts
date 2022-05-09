@@ -5,11 +5,16 @@ import { Exception } from "shared/Internal/Exception";
 import { Item } from "shared/Classes/Item";
 import Input from "shared/Classes/Input";
 import { Tweener } from "shared/Utility/Classes/Tweenable";
+import { GameStats } from "shared/Classes/Stats";
 
 declare global {
     interface KnitControllers {
         UIController: typeof UIController;
     }
+}
+
+function xpUntilNext(level: number, amt: number, spd: number) {
+    return (level / amt) ^ spd
 }
 
 const main = UI.Main();
@@ -21,9 +26,44 @@ const UIController = Knit.CreateController({
         InvOpen: false
     },
 
+    Update(name: string, value: unknown): void {
+        const gold = main.Game.Gold;
+        const crystals = main.Game.Crystals;
+        const statList = main.Game.Stats.List;
+        const xpBar = new Tweener(main.Game.XP.Bar);
+        const level = main.Game.Level;
+        switch(name) {
+            case "gold":
+                gold.Value.Text = tostring(value);
+                break;
+            case "crystals":
+                crystals.Value.Text = tostring(value);
+                break;
+            case "inventory":
+                const inv = <Item[]>value;
+                break;
+            case "stats":
+                const stats = <GameStats>value;
+                statList.Resist.Text = `Resist: ${stats.Resist}`;
+                statList.Damage.Text = `Damage: ${stats.Damage}`;
+                statList.Health.Text = `Health: ${stats.Health}/${stats.MaxHealth}`;
+
+                const percent = stats.XP / xpUntilNext(stats.Level, .15, 2);
+                const size = new UDim2(percent * .93, 0, 1, 0);
+                xpBar.Tween(new TweenInfo(.2, Enum.EasingStyle.Sine), { Size: size });
+                level.Text = tostring(stats.Level);
+                break;
+
+            default:
+                throw new Exception("Unhandled data update");
+        }
+    },
+
     BindKeys(): void {
+        const shop = Knit.GetController("ShopController");
         Input.OnPress("C", () => this.OpenStats())
-            .OnPress("B", () => this.OpenInventory())
+            .OnPress("I", () => this.OpenInventory())
+            .OnPress("U", () => shop.Toggle())
             .BindBegan();
     },
 
@@ -35,10 +75,7 @@ const UIController = Knit.CreateController({
         
         const stats = new Tweener(statFrame);
         const info = new TweenInfo(.4, Enum.EasingStyle.Sine);
-        if (this.State.StatsOpen)
-            stats.Tween(info, { Position: openPos });
-        else
-            stats.Tween(info, { Position: closedPos });
+        stats.Tween(info, { Position: this.State.StatsOpen ? openPos : closedPos });
     },
 
     OpenInventory(): void {
@@ -47,24 +84,7 @@ const UIController = Knit.CreateController({
     },
 
     KnitStart(): void {
-        const gold = main.Game.Gold;
-        const crystals = main.Game.Crystals;
-        DatabaseUpdate.Connect((name, value) => {
-            switch(name) {
-                case "gold":
-                    gold.Value.Text = tostring(value);
-                    break;
-                case "crystals":
-                    crystals.Value.Text = tostring(value);
-                    break;
-                case "inventory":
-                    const inv = <Item[]>value;
-                    break;
-
-                default:
-                    throw new Exception("Unhandled data update");
-            }
-        });
+        DatabaseUpdate.Connect((name, value) => this.Update(name, value));
     }
 });
 

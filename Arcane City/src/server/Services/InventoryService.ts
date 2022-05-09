@@ -1,6 +1,4 @@
-import { ClientRemoteSignal, KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
-import { Store } from "shared/Classes/DataBase";
-import { Remotes } from "shared/Remotes";
+import { KnitServer as Knit } from "@rbxts/knit";
 import { Item } from "../../shared/Classes/Item";
 
 declare global {
@@ -18,8 +16,8 @@ const InventoryService = Knit.CreateService({
         Get<R extends Instance = Instance>(p: Player, itemName: string): Item<R> | undefined {
             return this.Server.Get(p, itemName);
         },
-        Add<R extends Instance = Instance>(p: Player, name: string, model: R): Item<R> {
-            return this.Server.Add(p, name, model);
+        Add<R extends Instance = Instance>(p: Player, item: Item<R>): Item<R> {
+            return this.Server.Add(p, item);
         },
         Remove(p: Player, name: string): Item<Instance> | undefined {
             return this.Server.Remove(p, name);
@@ -35,8 +33,7 @@ const InventoryService = Knit.CreateService({
         return storage.find(i => i.Name === itemName) as Item<R> | undefined;
     },
 
-    Add<R extends Instance = Instance>(p: Player, name: string, model: R): Item<R> {
-        const item = new Item<R>(name, model)
+    Add<R extends Instance = Instance>(p: Player, item: Item<R>): Item<R> {
         storage.push(item);
         this.Update(p);
         return item;

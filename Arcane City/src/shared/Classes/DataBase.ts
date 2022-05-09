@@ -19,19 +19,19 @@ export class DataBase {
 
     public InitStore<T = unknown>(name: string, defaultValue?: T): Store<T> {
         const store = this.GetStore<T>(name);
-        store.Save();
-
+        
         const updateClient = (storeName: string, value: T): void => {
-            store.Save();
             this.Update.SendToPlayer(this.player, storeName, value);
+            store.Save();
         }
-
+        
         store.OnUpdate((value: T) => updateClient(name, value));
         if (defaultValue !== undefined) {
             const value = store.Get(defaultValue);
             store.Set(value);
         }
-
+        
+        store.Save();
         return store;
     }
 
@@ -40,7 +40,7 @@ export class DataBase {
     }
 
     public Set<T = unknown>(name: string, value: T): T{
-        this.GetStore<T>(name).Set(value)
+        this.GetStore<T>(name).Set(value);
         return value;
     }
 }

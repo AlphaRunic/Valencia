@@ -18,8 +18,6 @@ export class LoadWheel extends Roact.Component<Props> {
             new TweenInfo(.85, Enum.EasingStyle.Linear, Enum.EasingDirection.In, math.huge),
             { Rotation: img.Rotation + 360 }
         );
-
-        game.BindToClose(() => t.Cancel());
     }
 
     public render(): Element<ImageLabel> {

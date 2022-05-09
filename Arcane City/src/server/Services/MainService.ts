@@ -8,7 +8,6 @@ declare global {
 
 const MainService = Knit.CreateService({
     Name: "MainService",
-    Inventory: Knit.GetService("InventoryService"),
 
     KnitStart(): void {
         

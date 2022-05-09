@@ -1,4 +1,4 @@
-import { Tween } from "../../Utility/Functions/UI/Tween";
+import { Tween } from "../Functions/UI/Tween";
 
 export class Tweener<T extends Instance = Instance> {
     public constructor(

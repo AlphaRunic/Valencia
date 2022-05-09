@@ -26,12 +26,12 @@ export class UI {
         UI.Toggle(false);
     }
 
-    public static LoadScreen(): PlayerGui["LoadScreen"] {
-        return PUI.WaitForChild("LoadScreen") as PlayerGui["LoadScreen"];
-    }
-
     public static Main(): PlayerGui["Main"] {
         return PUI.WaitForChild("Main") as PlayerGui["Main"];
+    }
+
+    public static LoadScreen(): PlayerGui["LoadScreen"] {
+        return PUI.WaitForChild("LoadScreen") as PlayerGui["LoadScreen"];
     }
 
     public static FindElement<T extends Instance>(instance: Instance, instanceName: string): T {
