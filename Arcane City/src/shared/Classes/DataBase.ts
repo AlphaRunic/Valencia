@@ -14,18 +14,18 @@ export class DataBase {
     }
 
     private GetStore<T = unknown>(name: string): Store<T> {
-        return DataStore2<T>(name, this.player);
+        return DataStore2<T>(<string>name, this.player);
     }
 
     public InitStore<T = unknown>(name: string, defaultValue?: T): Store<T> {
         const store = this.GetStore<T>(name);
         
         const updateClient = (storeName: string, value: T): void => {
-            this.Update.SendToPlayer(this.player, storeName, value);
+            this.Update.SendToPlayer(this.player, <string>storeName, value);
             store.Save();
         }
         
-        store.OnUpdate((value: T) => updateClient(name, value));
+        store.OnUpdate((value: unknown) => updateClient(name, <T>value));
         if (defaultValue !== undefined) {
             const value = store.Get(defaultValue);
             store.Set(value);
@@ -35,11 +35,11 @@ export class DataBase {
         return store;
     }
 
-    public async Get<T = unknown>(name: string, defaultValue?: T): Promise<T> {
-        return this.GetStore<T>(name).GetAsync(defaultValue);
+    public Get<T = unknown>(name: string, defaultValue?: T): T | undefined {
+        return this.GetStore<T>(name).Get(defaultValue);
     }
 
-    public Set<T = unknown>(name: string, value: T): T{
+    public Set<T = unknown>(name: string, value: T): T {
         this.GetStore<T>(name).Set(value);
         return value;
     }

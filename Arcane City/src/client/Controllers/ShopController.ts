@@ -17,6 +17,8 @@ const main = UI.Main();
 const shop = main.Interactions.Shop;
 const assets = ReplicatedFirst.Assets
 const items = assets.ShopItems;
+let lastItem: Item;
+
 const ShopController = Knit.CreateController({
     Name: "ShopController",
     Data: Knit.GetService("DataService"),
@@ -32,24 +34,32 @@ const ShopController = Knit.CreateController({
 
     Purchase<R extends Instance = Instance>(item: Item<R>): boolean {
         let success = false;
-        const store = <Store<number>>this.Data.GetStore("Gold");
-        const gold = store.Get(350);
-        if (gold >= item.Price) {
-            store.Increment(-item.Price);
-            this.Inv.Add(item);
-            success = true;
+        try {
+            const gold = <number>this.Data.Get("Gold", 350);
+            if (gold >= item.Price) {
+                this.Data.Set("Gold", gold - item.Price);
+                this.Inv.Add(item);
+                success = true;
+            }
+        } catch(e) {
+            warn(e);
+        } finally {
+            item.Purchased = success;
+            return success;
         }
-        
-        item.Purchased = success;
-        return success;
     },
 
     OpenItem<R extends Instance = Instance>(i: Item<R>): void {
+        if (!lastItem || lastItem === i)
+            this.ItemDisplayed = !this.ItemDisplayed
+        else
+            this.ItemDisplayed = true;
+
         const shadow = shop.ItemDisplay.Shadow;
         const windowPos = GetTweenPos(shop.Window);
         const displayPos = GetTweenPos(shop.ItemDisplay);
         const displayBgPos = GetTweenPos(shadow);
-        const info = new TweenInfo(.5, Enum.EasingStyle.Sine);
+        const info = new TweenInfo(.3, Enum.EasingStyle.Sine);
         const window = new Tweener(shop.Window);
         const display = new Tweener(shop.ItemDisplay);
         const displayBackground = new Tweener(shadow);
@@ -61,9 +71,10 @@ const ShopController = Knit.CreateController({
         displayViewport.Price.Text = tostring(i.Price);
         shadow.Purchase.Text = i.Purchased ? "Purchased" : "Purchase";
         shadow.Description.Text = i.Description;
-        shadow.Purchase.MouseButton1Click.Connect(() => {
+        shadow.Purchase.MouseButton1Click.Connect(async () => {
             if (i.Purchased) return;
-            const success = this.Purchase(i);
+            const success = await this.Purchase<R>(i);
+            print(i);
             if (success)
                 shadow.Purchase.Text = "Purchased";
         });

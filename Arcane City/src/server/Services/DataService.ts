@@ -1,8 +1,9 @@
 import { KnitServer as Knit } from "@rbxts/knit";
 import { Players } from "@rbxts/services";
-import { DataBase, Store } from "shared/Classes/DataBase";
+import { DataBase } from "shared/Classes/DataBase";
 import { Item } from "shared/Classes/Item";
 import { GameStats } from "shared/Classes/Stats";
+import StrictMap from "shared/Utility/Classes/StrictMap";
 
 declare global {
     interface KnitServices {
@@ -11,32 +12,34 @@ declare global {
 }
 
 interface DataStores {
-    Gold?: Store<number>;
-    Crystals?: Store<number>;
-    Inventory?: Store<Item[]>;
-    Stats?: Store<GameStats>;
+    Gold: number;
+    Crystals: number;
+    Inventory: Item[];
+    Stats: GameStats;
 }
 
-const stores = new Map<Player, DataStores>();
+const databases = new StrictMap<Player, DataBase>();
 const DataService = Knit.CreateService({
     Name: "DataService",
 
     Client: {
-        GetStore<T = unknown>(p: Player, store: keyof DataStores): Store<T> {
-            return this.Server.GetStore<T>(p, store)!;
-        }, 
-        GetStores(p: Player): DataStores | undefined {
-            return this.Server.GetStores(p);
+        Get(p: Player, name: keyof DataStores, defaultValue?: DataStores[typeof name]): DataStores[typeof name] {
+            return this.Server.Get(p, name, defaultValue);
+        },
+        Set(p: Player, name: keyof DataStores, value: DataStores[typeof name]): void {
+            return this.Server.Set(p, name, value);
         }
     },
 
-    GetStore<T = unknown>(p: Player, store: keyof DataStores): Store<T> {
-        const stores = this.GetStores(p)!;
-        return <Store<T>><unknown>stores[store]!;
+    Get(p: Player, name: keyof DataStores, defaultValue?: DataStores[typeof name]): DataStores[typeof name] {
+        const db = databases.Get(p)
+        const value = db.Get(name, defaultValue);
+        return value!;
     },
 
-    GetStores(p: Player): DataStores | undefined {
-        return stores.get(p);
+    Set(p: Player, name: keyof DataStores, value: DataStores[typeof name]): void {
+        const db = databases.Get(p)
+        db.Set(name, value);
     },
 
     KnitStart() {
@@ -44,19 +47,19 @@ const DataService = Knit.CreateService({
             p.CharacterAdded.Connect(() => {
                 const names = ["gold", "crystals", "inventory", "stats"];
                 const db = new DataBase(p, ...names);
-                stores.set(p, {
-                    Gold: db.InitStore<number>(names[0], 350),
-                    Crystals: db.InitStore<number>(names[1], 0),
-                    Inventory: db.InitStore<Item[]>(names[2], []),
-                    Stats: db.InitStore<GameStats>(names[3], {
-                        Level: 1,
-                        XP: 0,
-                        Health: 600,
-                        MaxHealth: 600,
-                        Damage: 0,
-                        Resist: 0
-                    })
+                db.InitStore(names[0], 350);
+                db.InitStore(names[1], 0);
+                db.InitStore(names[2], []);
+                db.InitStore(names[3], {
+                    Level: 1,
+                    XP: 0,
+                    Health: 600,
+                    MaxHealth: 600,
+                    Damage: 0,
+                    Resist: 0
                 });
+
+                databases.Set(p, db);
             });
         });
     }

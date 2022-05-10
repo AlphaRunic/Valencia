@@ -25,8 +25,7 @@ const InventoryService = Knit.CreateService({
     },
 
     Update(p: Player): void {
-        const inv = this.Data.GetStore<Item[]>(p, "Inventory");
-        inv.Set(storage);
+        this.Data.Set(p, "Inventory", storage);
     },
 
     Get<R extends Instance = Instance>(p: Player, itemName: string): Item<R> | undefined {
