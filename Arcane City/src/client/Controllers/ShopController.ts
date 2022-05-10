@@ -19,17 +19,24 @@ const assets = ReplicatedFirst.Assets
 const items = assets.ShopItems;
 let lastItem: Item;
 
+interface Required {
+    Blur?: typeof Knit.Controllers["BlurController"];
+}
+
+const req: Required = {};
 const ShopController = Knit.CreateController({
     Name: "ShopController",
     Data: Knit.GetService("DataService"),
     Inv: Knit.GetService("InventoryService"),
     ItemDisplayed: false, 
     Items: [
-        new Item("Sword", items.BasicSword, 350, "A sword to slay your first of monsters.")
+        new Item("Sword", "Weapon", "A sword to slay your first of monsters.", items.BasicSword, 350)
     ],
 
     Toggle(value?: boolean): void {
         shop.Visible = value?? !shop.Visible;
+        main.Game.Visible = value !== undefined ? !value : !main.Game.Visible;
+        req.Blur!.Toggle();
     },
 
     Purchase<R extends Instance = Instance>(item: Item<R>): boolean {
@@ -74,7 +81,6 @@ const ShopController = Knit.CreateController({
         shadow.Purchase.MouseButton1Click.Connect(async () => {
             if (i.Purchased) return;
             const success = await this.Purchase<R>(i);
-            print(i);
             if (success)
                 shadow.Purchase.Text = "Purchased";
         });
@@ -118,6 +124,7 @@ const ShopController = Knit.CreateController({
     KnitStart(): void {
         this.RenderItems();
         shop.Window.Close.MouseButton1Click.Connect(() => this.Toggle(false));
+        req.Blur = Knit.GetController("BlurController");
     }
 });
 

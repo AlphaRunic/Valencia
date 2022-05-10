@@ -6,17 +6,6 @@ interface PlayerGui extends BasePlayerGui {
 	};	
 	Main: ScreenGui & {
 		Interactions: Frame & {
-			Dialogue: Frame & {
-				UIGradient: UIGradient;
-				Next: TextButton & {
-					UICorner: UICorner;
-				};
-				UICorner: UICorner;
-				Content: TextLabel & {
-					UITextSizeConstraint: UITextSizeConstraint;
-				};
-				Speaker: TextLabel;
-			};
 			Shop: Frame & {
 				ItemDisplay: Frame & {
 					Shadow: Frame & {
@@ -44,6 +33,7 @@ interface PlayerGui extends BasePlayerGui {
 					Title: TextLabel;
 					Close: TextButton & {
 						UIAspectRatioConstraint: UIAspectRatioConstraint;
+						UICorner: UICorner;
 					};
 				};
 			};
@@ -51,7 +41,66 @@ interface PlayerGui extends BasePlayerGui {
 			NotificationCenter: Frame & {
 				UIListLayout: UIListLayout;
 			};
-		};
+			Dialogue: Frame & {
+				UIGradient: UIGradient;
+				Next: TextButton & {
+					UICorner: UICorner;
+				};
+				UICorner: UICorner;
+				Content: TextLabel & {
+					UITextSizeConstraint: UITextSizeConstraint;
+				};
+				Speaker: TextLabel;
+			};
+			Backpack: Frame & {
+				Items: ScrollingFrame & {
+					UIListLayout: UIListLayout;
+					UIPageLayout: UIPageLayout;
+				};
+				ItemStorage: Frame & {
+					Weapons: Folder;
+					Hats: Folder;
+					Robes: Folder;
+					Boots: Folder;
+					Charms: Folder;
+				};
+				Title: TextLabel;
+				Close: TextButton & {
+					UIAspectRatioConstraint: UIAspectRatioConstraint;
+					UICorner: UICorner;
+				};
+				Actions: Frame & {
+					UIListLayout: UIListLayout;
+					Equip: ImageButton & {
+						UIAspectRatioConstraint: UIAspectRatioConstraint;
+						UICorner: UICorner;
+					};
+				};
+				Categories: Frame & {
+					Robes: ImageButton & {
+						UIAspectRatioConstraint: UIAspectRatioConstraint;
+						UICorner: UICorner;
+					};
+					Boots: ImageButton & {
+						UIAspectRatioConstraint: UIAspectRatioConstraint;
+						UICorner: UICorner;
+					};
+					UIListLayout: UIListLayout;
+					Hats: ImageButton & {
+						UIAspectRatioConstraint: UIAspectRatioConstraint;
+						UICorner: UICorner;
+					};
+					Charms: ImageButton & {
+						UIAspectRatioConstraint: UIAspectRatioConstraint;
+						UICorner: UICorner;
+					};
+					Weapons: ImageButton & {
+						UIAspectRatioConstraint: UIAspectRatioConstraint;
+						UICorner: UICorner;
+					};
+				};
+			};
+		};		
 		Game: Frame & {
 			Stats: Frame & {
 				Title: TextLabel;

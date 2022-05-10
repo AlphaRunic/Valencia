@@ -2,9 +2,10 @@ import { Exception } from "shared/Internal/Exception";
 
 export default class StrictMap<K, V> {
     private readonly cache: Map<K, V>;
+    private idx = 0;
 
-    public constructor(base?: Map<K, V>) {
-        this.cache = base?? new Map<K, V>();
+    public constructor(base: ReadonlyArray<readonly [K, V]> = []) {
+        this.cache = new Map<K, V>(base);
     }
 
     public Size(): number {
@@ -22,5 +23,9 @@ export default class StrictMap<K, V> {
             throw new Exception(`Key "${key}" has no value associated with it.`);
         else
             return value;
+    }
+
+    public ForEach(callback: (value: V, key: K) => void): void {
+        this.cache.forEach(callback);
     }
 }

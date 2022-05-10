@@ -11,6 +11,7 @@ interface ReplicatedFirst extends Instance {
 		};
 		UI: Folder & {
 			NotificationLabel: TextLabel;
+			BackpackItem: TextButton;
 			ShopItem: ViewportFrame & {
 				UIAspectRatioConstraint: UIAspectRatioConstraint;
 				Title: TextLabel;
